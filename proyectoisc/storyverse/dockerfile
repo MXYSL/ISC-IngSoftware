@@ -19,6 +19,18 @@ RUN apt-get update && apt-get install -y \
 # Habilita mod_rewrite para Apache
 RUN a2enmod rewrite
 
+# Configura Apache con rewrite y configuración básica para Laravel
+RUN echo '<VirtualHost *:80>\n\
+    DocumentRoot /var/www/html/public\n\
+    <Directory /var/www/html/public>\n\
+        AllowOverride All\n\
+        Require all granted\n\
+    </Directory>\n\
+</VirtualHost>' > /etc/apache2/sites-available/000-default.conf
+
+# Configuración PHP embebida (equivalente a un php.ini personalizado)
+RUN echo "memory_limit=512M\nupload_max_filesize=50M\npost_max_size=50M\nmax_execution_time=300" > /usr/local/etc/php/conf.d/custom.ini
+
 # Configura el directorio de trabajo
 WORKDIR /var/www/html
 
@@ -28,26 +40,19 @@ COPY . .
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Instala dependencias de PHP
+# Instala dependencias de PHP (sin desarrollo, optimizado)
 RUN composer install --no-dev --optimize-autoloader
 
 # Instala dependencias de Node.js y construye assets
 RUN npm install && npm run build
 
-# Configura permisos
+# Configura permisos necesarios para Laravel
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Configura Apache para Laravel
-COPY docker/apache-config.conf /etc/apache2/sites-available/000-default.conf
-
 # Expone el puerto 80
 EXPOSE 80
 
-# Script de inicio
-COPY docker/start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
-
-# Ejecuta el script de inicio
-CMD ["/usr/local/bin/start.sh"]
+# Usa el comando oficial para iniciar Apache en primer plano
+CMD ["apache2-foreground"]
