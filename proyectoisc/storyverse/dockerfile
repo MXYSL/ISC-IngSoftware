@@ -1,7 +1,7 @@
 # Usa la imagen oficial de PHP con Apache
 FROM php:8.2-apache
 
-# Instala dependencias del sistema
+# Instala dependencias del sistema y extensiones necesarias
 RUN apt-get update && apt-get install -y \
     default-mysql-client \
     git \
@@ -10,16 +10,17 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
+    libredis-dev \
     zip \
     unzip \
     nodejs \
     npm \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip redis
 
 # Habilita mod_rewrite para Apache
 RUN a2enmod rewrite
 
-# Configura Apache con rewrite y configuración básica para Laravel
+# Configura Apache para Laravel
 RUN echo '<VirtualHost *:80>\n\
     DocumentRoot /var/www/html/public\n\
     <Directory /var/www/html/public>\n\
@@ -28,10 +29,13 @@ RUN echo '<VirtualHost *:80>\n\
     </Directory>\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
-# Configuración PHP embebida (equivalente a un php.ini personalizado)
-RUN echo "memory_limit=512M\nupload_max_filesize=50M\npost_max_size=50M\nmax_execution_time=300" > /usr/local/etc/php/conf.d/custom.ini
+# Configuración PHP embebida (equivalente a php.ini personalizado)
+RUN echo "memory_limit=512M\n\
+upload_max_filesize=50M\n\
+post_max_size=50M\n\
+max_execution_time=300" > /usr/local/etc/php/conf.d/custom.ini
 
-# Configura el directorio de trabajo
+# Define el directorio de trabajo
 WORKDIR /var/www/html
 
 # Copia los archivos del proyecto
@@ -40,19 +44,19 @@ COPY . .
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Instala dependencias de PHP (sin desarrollo, optimizado)
+# Instala dependencias de PHP (modo producción)
 RUN composer install --no-dev --optimize-autoloader
 
 # Instala dependencias de Node.js y construye assets
 RUN npm install && npm run build
 
-# Configura permisos necesarios para Laravel
+# Ajusta permisos para Laravel
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Expone el puerto 80
+# Expone el puerto HTTP
 EXPOSE 80
 
-# Usa el comando oficial para iniciar Apache en primer plano
+# Inicia Apache en primer plano
 CMD ["apache2-foreground"]
