@@ -1,7 +1,7 @@
 # Usa la imagen oficial de PHP con Apache
 FROM php:8.2-apache
 
-# Instala dependencias del sistema y extensiones necesarias
+# Instala dependencias del sistema
 RUN apt-get update && apt-get install -y \
     default-mysql-client \
     git \
@@ -10,12 +10,15 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
-    libredis-dev \
     zip \
     unzip \
     nodejs \
     npm \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip redis
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+
+# Instala extensión Redis desde PECL
+RUN pecl install redis \
+    && docker-php-ext-enable redis
 
 # Habilita mod_rewrite para Apache
 RUN a2enmod rewrite
@@ -29,7 +32,7 @@ RUN echo '<VirtualHost *:80>\n\
     </Directory>\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
-# Configuración PHP embebida (equivalente a php.ini personalizado)
+# Configuración PHP embebida
 RUN echo "memory_limit=512M\n\
 upload_max_filesize=50M\n\
 post_max_size=50M\n\
@@ -44,19 +47,19 @@ COPY . .
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Instala dependencias de PHP (modo producción)
+# Instala dependencias PHP
 RUN composer install --no-dev --optimize-autoloader
 
-# Instala dependencias de Node.js y construye assets
+# Instala dependencias de Node.js
 RUN npm install && npm run build
 
-# Ajusta permisos para Laravel
+# Permisos correctos para Laravel
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Expone el puerto HTTP
+# Expone el puerto 80
 EXPOSE 80
 
-# Inicia Apache en primer plano
+# Inicia Apache
 CMD ["apache2-foreground"]
