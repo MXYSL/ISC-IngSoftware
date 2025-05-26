@@ -1,0 +1,312 @@
+/* Estilos generales */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden; /* Evita el scroll horizontal si algo se desborda */
+}
+
+body {
+    
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #d6d6d6;
+    width: 100vw;
+}
+
+.container {
+    display: flex;
+    height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+    width: 100vw; /* Asegura que ocupe todo el ancho de la ventana */
+    overflow: hidden;
+}
+
+/* Panel izquierdo con la imagen de fondo */
+.left-panel {
+    flex: 1;
+    color: white;
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh; /* Ocupa toda la altura del contenedor */
+    width: 100vw; /* Ocupa todo el ancho del contenedor */
+}
+
+.left-panel h1 {
+    font-size: 5.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    color: #e1e1e1;
+}
+
+.left-panel p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+    max-width: 100%;
+    opacity: 0.9;
+    text-align: justify;
+    color: #dddcdc;
+}
+
+.social-media {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+}
+
+.social-media a {
+    color: white;
+    background-color: rgba(79, 75, 75, 0.606);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.social-media a:hover {
+    background-color: rgba(198, 27, 27, 0.832);
+    transform: translateY(-3px);
+}
+ 
+/* Panel derecho con el formulario */
+.right-panel {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: #353535b7;
+    height: 100vh; /* Ocupa toda la altura del contenedor */
+    width: 100vw; /* Ocupa todo el ancho del contenedor */
+
+}
+
+.form-container {
+    width: 100%;
+    max-width:680px;
+    padding: 1rem;
+}
+
+.form-container h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: #e1e1e1;
+    text-align: center;
+}
+
+.input-group {
+    margin-bottom: 1.25rem;
+    
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #eeeeee;
+    font-size: 0.9rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #544d4d; /* Borde negro */
+    background-color: rgba(231, 231, 231, 0.719); /* Tonalidad más baja */
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: border 0.3s ease, background-color 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #736053; /* Color del borde al enfocar */
+    outline: none;
+    background-color: rgba(232, 223, 223, 0.818); /* Fondo ligeramente más oscuro al enfocar */
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: #ffeaea;
+    
+}
+
+.remember-me input {
+    margin-right: 0.5rem;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #988b4e;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #9d6b43;
+    color: #ddd;
+    transform: scale(0.95);
+}
+
+.forgot-password {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.forgot-password a, 
+.login-link a {
+    color: #eecbcb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.forgot-password a:hover, 
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.social-login button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.social-login button:hover{
+    background-color: #7272729a;
+    transform: scale(0.95);
+}
+
+.google{
+    background-color: #db4437;
+    color: white;
+}
+
+.facebook {
+    background-color: #3b5998;
+    color: white;
+}
+
+.password-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    opacity: 1.8;
+    transition: opacity 0.3s;
+}
+.toggle-password:hover {
+    opacity: 1.8;
+}
+
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        height: auto; /* Permite que el contenido se ajuste dinámicamente */
+    }
+    
+    .left-panel {
+        padding: 1.5rem;
+        height: auto; /* Ajusta la altura automáticamente */
+        width: 100%; /* Asegura que ocupe todo el ancho */
+        text-align: center; /* Centra el contenido */
+    }
+    
+    .left-panel p {
+        max-width: 90%; /* Reduce el ancho del texto */
+        margin: 0 auto; /* Centra el texto */
+    }
+    
+    .left-panel h1 {
+        font-size: 2rem; /* Reduce el tamaño del título */
+    }
+
+    .right-panel {
+        padding: 1.5rem;
+        width: 100%; /* Asegura que ocupe todo el ancho */
+    }
+
+    .form-container {
+        max-width: 90%; /* Reduce el ancho del formulario */
+        margin: 0 auto; /* Centra el formulario */
+    }
+}
+
+@media (max-width: 480px) {
+    .left-panel h1 {
+        font-size: 1.8rem; /* Ajusta aún más el tamaño del título */
+    }
+
+    .left-panel p {
+        font-size: 1rem; /* Reduce el tamaño del texto */
+    }
+
+    .form-container h2 {
+        font-size: 1.5rem; /* Ajusta el tamaño del encabezado del formulario */
+    }
+
+    .input-group input {
+        padding: 0.5rem; /* Reduce el relleno de los campos de entrada */
+        font-size: 0.8rem; /* Ajusta el tamaño de la fuente */
+    }
+
+    .submit-btn {
+        padding: 0.5rem; /* Reduce el relleno del botón */
+        font-size: 0.8rem; /* Ajusta el tamaño de la fuente */
+    }
+
+    .social-login button {
+        padding: 8px; /* Ajusta el relleno de los botones sociales */
+        font-size: 14px; /* Reduce el tamaño de la fuente */
+    }
+}
