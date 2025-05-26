@@ -1,31 +1,29 @@
 # Usa la imagen oficial de PHP con Apache
 FROM php:8.2-apache
 
-# Instala dependencias del sistema
+# Instala dependencias del sistema necesarias para PHP y extensiones
 RUN apt-get update && apt-get install -y \
-    default-mysql-client \
-    git \
-    curl \
+    libjpeg-dev \
     libpng-dev \
+    libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
     zip \
     unzip \
+    git \
+    curl \
+    default-mysql-client \
     nodejs \
     npm \
-    && docker-php-ext-configure gd --with-jpeg --with-freetype \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath zip gd redis
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath zip gd \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-
-# Instala extensión Redis desde PECL
-RUN pecl install redis \
-    && docker-php-ext-enable redis
-
-# Habilita mod_rewrite para Apache
+# Habilita mod_rewrite para Laravel
 RUN a2enmod rewrite
 
-# Configura Apache para Laravel
+# Configura Apache para servir Laravel desde /public
 RUN echo '<VirtualHost *:80>\n\
     DocumentRoot /var/www/html/public\n\
     <Directory /var/www/html/public>\n\
@@ -34,16 +32,13 @@ RUN echo '<VirtualHost *:80>\n\
     </Directory>\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
-# Configuración PHP embebida
-RUN echo "memory_limit=512M\n\
-upload_max_filesize=50M\n\
-post_max_size=50M\n\
-max_execution_time=300" > /usr/local/etc/php/conf.d/custom.ini
+# Aumenta límites de PHP
+RUN echo "memory_limit=512M\nupload_max_filesize=50M\npost_max_size=50M\nmax_execution_time=300" > /usr/local/etc/php/conf.d/custom.ini
 
-# Define el directorio de trabajo
+# Establece directorio de trabajo
 WORKDIR /var/www/html
 
-# Copia los archivos del proyecto
+# Copia el proyecto al contenedor
 COPY . .
 
 # Instala Composer
@@ -52,10 +47,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Instala dependencias PHP
 RUN composer install --no-dev --optimize-autoloader
 
-# Instala dependencias de Node.js
+# Instala y compila assets con Node.js
 RUN npm install && npm run build
 
-# Permisos correctos para Laravel
+# Ajusta permisos para Laravel
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
@@ -63,5 +58,5 @@ RUN chown -R www-data:www-data /var/www/html \
 # Expone el puerto 80
 EXPOSE 80
 
-# Inicia Apache
+# Comando por defecto
 CMD ["apache2-foreground"]
