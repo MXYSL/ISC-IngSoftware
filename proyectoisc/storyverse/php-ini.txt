@@ -1,0 +1,41 @@
+[PHP]
+; Configuración de PHP para Laravel
+
+; Límites de memoria y tiempo
+memory_limit = 256M
+max_execution_time = 300
+max_input_time = 300
+
+; Subida de archivos
+upload_max_filesize = 50M
+post_max_size = 50M
+max_file_uploads = 20
+
+; Configuración de sesiones
+session.gc_maxlifetime = 7200
+session.cookie_lifetime = 0
+
+; Configuración de errores
+display_errors = On
+display_startup_errors = On
+log_errors = On
+error_log = /var/log/php_errors.log
+
+; Zona horaria
+date.timezone = UTC
+
+; Configuración de OPcache (para producción)
+opcache.enable = 1
+opcache.enable_cli = 1
+opcache.memory_consumption = 128
+opcache.interned_strings_buffer = 8
+opcache.max_accelerated_files = 10000
+opcache.revalidate_freq = 2
+opcache.fast_shutdown = 1
+
+; Configuración de Realpath Cache
+realpath_cache_size = 4096K
+realpath_cache_ttl = 600
+
+; Variables de entorno
+variables_order = "EGPCS"

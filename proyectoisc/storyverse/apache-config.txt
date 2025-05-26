@@ -1,0 +1,28 @@
+<VirtualHost *:80>
+    DocumentRoot /var/www/html/public
+    
+    <Directory /var/www/html/public>
+        AllowOverride All
+        Require all granted
+        
+        # Laravel pretty URLs
+        RewriteEngine On
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule ^(.*)$ index.php [QSA,L]
+    </Directory>
+    
+    # Logging
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    
+    # Security headers
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+    
+    # PHP settings
+    php_value upload_max_filesize 50M
+    php_value post_max_size 50M
+    php_value memory_limit 256M
+</VirtualHost>
