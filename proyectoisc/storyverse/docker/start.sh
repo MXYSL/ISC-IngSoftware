@@ -1,13 +1,4 @@
 #!/bin/bash
-
-# Esperar a que MySQL esté disponible
-echo "Esperando a que MySQL esté disponible..."
-while ! mysqladmin ping -h"mysql" -P3306 --silent; do
-    sleep 1
-done
-
-echo "MySQL está disponible!"
-
 # Ejecutar migraciones y seeders
 echo "Ejecutando migraciones..."
 php artisan migrate --force
