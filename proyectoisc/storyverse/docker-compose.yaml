@@ -10,7 +10,6 @@ services:
       - "8000:80"
     volumes:
       - .:/var/www/html
-      - ./docker/php.ini:/usr/local/etc/php/conf.d/custom.ini
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
@@ -38,7 +37,6 @@ services:
       MYSQL_PASSWORD: storyverse_password
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - storyverse-network
 
