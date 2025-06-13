@@ -218,3 +218,7 @@ class UserProfileController extends Controller
         ]);
     }
 }
+
+if (!Storage::exists('public/profile_images')) {
+    Storage::makeDirectory('public/profile_images');
+}
