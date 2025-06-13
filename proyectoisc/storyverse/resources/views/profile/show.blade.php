@@ -55,7 +55,11 @@
             @endif
 
             <div class="profile-sidebar14">
-                <img class="profile-image14" src="{{ auth()->user()->imagen_url }}" alt="Profile Image">
+                @if(auth()->user()->imagen_blob)
+                    <img class="profile-image14" src="data:image/jpeg;base64,{{ base64_encode(auth()->user()->imagen_blob) }}" alt="Profile Image">
+                @else
+                    <img class="profile-image14" src="{{ asset('img/default-profile.png') }}" alt="Default Profile Image">
+                @endif
                 <h3 class="profile-name14">{{ auth()->user()->username }}</h3>
                 <p class="profile-title14">{{ auth()->user()->role->name ?? 'Usuario' }}</p>
                 
@@ -78,15 +82,6 @@
                         <button type="button" class="btn-primary" onclick="document.getElementById('file-input').click()">Cambiar foto</button>
                     </div>
                 </form>
-                
-                <!-- Formulario para eliminar imagen -->
-                @if(auth()->user()->imagen)
-                    <form action="{{ route('profile.image.delete') }}" method="POST" style="margin-top: 10px;">
-                        @csrf
-                        @method('DELETE')
-                        <!--<button type="submit" class="btn-danger">Eliminar foto</button> -->
-                    </form>
-                @endif
             </div>
 
             <div class="profile-main14"> 

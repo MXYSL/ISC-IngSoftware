@@ -21,9 +21,11 @@ services:
       - DB_PASSWORD=root_password
     depends_on:
       - mysql
-      - redis
     networks:
       - storyverse-network
+    command: >
+      sh -c "php artisan migrate --force &&
+             apache2-foreground"
 
   mysql:
     image: mysql:8.0

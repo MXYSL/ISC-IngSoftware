@@ -1,7 +1,7 @@
 # Usa la imagen oficial de PHP con Apache
-FROM php:8.2-apache
+FROM php:8.2-apache-bullseye-slim
 
-# Instala dependencias del sistema necesarias para PHP y extensiones
+# Actualiza paquetes y habilita extensiones necesarias
 RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libpng-dev \
@@ -14,11 +14,21 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     default-mysql-client \
-    nodejs \
-    npm \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath zip gd \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Habilita Opcache para mejorar el rendimiento
+RUN docker-php-ext-install opcache
+
+# Configura Opcache
+RUN echo "opcache.enable=1\n\
+opcache.enable_cli=1\n\
+opcache.memory_consumption=128\n\
+opcache.interned_strings_buffer=8\n\
+opcache.max_accelerated_files=10000\n\
+opcache.revalidate_freq=2\n\
+opcache.validate_timestamps=1" > /usr/local/etc/php/conf.d/opcache.ini
 
 # Habilita mod_rewrite para Laravel
 RUN a2enmod rewrite
@@ -46,9 +56,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Instala dependencias PHP
 RUN composer install --no-dev --optimize-autoloader
-
-# Instala y compila assets con Node.js
-RUN npm install && npm run build
 
 # Ajusta permisos para Laravel
 RUN chown -R www-data:www-data /var/www/html \
