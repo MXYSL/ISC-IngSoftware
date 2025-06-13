@@ -1,5 +1,5 @@
 # Usa la imagen oficial de PHP con Apache
-FROM php:8.2-apache-bullseye-slim
+FROM php:8.2-apache
 
 # Actualiza paquetes y habilita extensiones necesarias
 RUN apt-get update && apt-get install -y \
