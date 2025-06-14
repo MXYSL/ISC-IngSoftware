@@ -58,7 +58,7 @@
                 @if(auth()->user()->imagen)
                     <img src="{{ asset('storage/profile_images/' . auth()->user()->imagen) }}" alt="Imagen de perfil" class="profile-image" width="200">
                 @else
-                    <img src="{{ asset('img/default-profile.png') }}" alt="Imagen por defecto" class="profile-image">
+                    <img src="{{ asset('img/default-profile.png') }}" alt="Imagen por defecto" class="profile-image"  width="200" >
                 @endif
                 <h3 class="profile-name14">{{ auth()->user()->username }}</h3>
                 <p class="profile-title14">{{ auth()->user()->role->name ?? 'Usuario' }}</p>
