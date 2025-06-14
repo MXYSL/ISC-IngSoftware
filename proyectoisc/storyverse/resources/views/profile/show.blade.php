@@ -56,7 +56,7 @@
 
             <div class="profile-sidebar14">
                 @if(auth()->user()->imagen)
-                    <img src="{{ asset('storage/profile_images/' . auth()->user()->imagen) }}" alt="Imagen de perfil" class="profile-image">
+                    <img src="{{ asset('storage/profile_images/' . auth()->user()->imagen) }}" alt="Imagen de perfil" class="profile-image" width="200">
                 @else
                     <img src="{{ asset('img/default-profile.png') }}" alt="Imagen por defecto" class="profile-image">
                 @endif
