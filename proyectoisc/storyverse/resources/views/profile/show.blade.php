@@ -55,10 +55,10 @@
             @endif
 
             <div class="profile-sidebar14">
-                @if(auth()->user()->imagen_blob)
-                    <img class="profile-image14" src="data:image/jpeg;base64,{{ base64_encode(auth()->user()->imagen_blob) }}" alt="Profile Image">
+                @if(auth()->user()->imagen)
+                    <img src="{{ asset('storage/profile_images/' . auth()->user()->imagen) }}" alt="Imagen de perfil" class="profile-image">
                 @else
-                    <img class="profile-image14" src="{{ asset('img/default-profile.png') }}" alt="Default Profile Image">
+                    <img src="{{ asset('img/default-profile.png') }}" alt="Imagen por defecto" class="profile-image">
                 @endif
                 <h3 class="profile-name14">{{ auth()->user()->username }}</h3>
                 <p class="profile-title14">{{ auth()->user()->role->name ?? 'Usuario' }}</p>
