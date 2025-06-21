@@ -23,18 +23,16 @@ services:
       - mysql
     networks:
       - storyverse-network
-    command: >
-  sh -c "
-    until nc -z -v -w30 mysql 3306; do
-      echo '⏳ Esperando a MySQL...';
-      sleep 3;
-    done;
-    echo '✅ MySQL está listo. Ejecutando migraciones...';
-    php artisan migrate --force &&
-    apache2-foreground
-  "
-
-
+  command: |
+    sh -c "
+      until nc -z -v -w30 mysql 3306; do
+        echo '⏳ Esperando a MySQL...';
+        sleep 3;
+      done;
+      echo '✅ MySQL está listo. Ejecutando migraciones...';
+      php artisan migrate --force &&
+      apache2-foreground
+    "
 
   mysql:
     image: mysql:8.0
